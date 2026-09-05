@@ -13,10 +13,10 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<PanoramaGeral />} />
+          <Route path="mercado-e-concorrencia" element={<MercadoEConcorrencia />} />
           <Route path="estrutura-do-investimento" element={<EstruturaDoInvestimento />} />
           <Route path="projecoes-financeiras" element={<ProjecoesFinanceiras />} />
           <Route path="viabilidade-do-projeto" element={<ViabilidadeDoProjeto />} />
-          <Route path="mercado-e-concorrencia" element={<MercadoEConcorrencia />} />
           <Route path="fontes-e-metodologia" element={<FontesEMetodologia />} />
         </Route>
       </Routes>

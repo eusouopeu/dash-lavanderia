@@ -11,23 +11,23 @@ import {
   PONTO_EQUILIBRIO,
   TICKET_MEDIO_ANO1,
 } from '../data'
-import { formatBRL, formatNumber, formatPercent } from '../format'
+import { formatBRL, formatBRLValue, formatNumber, formatPercent } from '../format'
 
 function FluxoTable() {
   const rows: { label: string; key: keyof (typeof FLUXO_CAIXA)[number]; isCurrency?: boolean }[] = [
-    { label: 'Ticket médio/cliente', key: 'ticketMedio', isCurrency: true },
+    { label: 'Ticket médio/cliente (R$)', key: 'ticketMedio', isCurrency: true },
     { label: 'Clientes/ano', key: 'clientesAno' },
-    { label: 'Receita', key: 'receita', isCurrency: true },
-    { label: 'Margem de contribuição total', key: 'margemContribuicaoTotal', isCurrency: true },
-    { label: 'Gastos fixos desembolsáveis', key: 'gastosFixosDesembolsaveis', isCurrency: true },
-    { label: 'EBITDA', key: 'ebitda', isCurrency: true },
-    { label: 'Depreciação', key: 'depreciacao', isCurrency: true },
-    { label: 'EBIT', key: 'ebit', isCurrency: true },
-    { label: 'Juros BNB', key: 'jurosBNB', isCurrency: true },
-    { label: 'Lucro operacional líquido', key: 'lucroOperacionalLiquido', isCurrency: true },
-    { label: 'FCO', key: 'fco', isCurrency: true },
-    { label: 'Investimentos', key: 'investimentos', isCurrency: true },
-    { label: 'Variação capital de giro', key: 'variacaoCapitalGiro', isCurrency: true },
+    { label: 'Receita (R$)', key: 'receita', isCurrency: true },
+    { label: 'Margem de contribuição total (R$)', key: 'margemContribuicaoTotal', isCurrency: true },
+    { label: 'Gastos fixos desembolsáveis (R$)', key: 'gastosFixosDesembolsaveis', isCurrency: true },
+    { label: 'EBITDA (R$)', key: 'ebitda', isCurrency: true },
+    { label: 'Depreciação (R$)', key: 'depreciacao', isCurrency: true },
+    { label: 'EBIT (R$)', key: 'ebit', isCurrency: true },
+    { label: 'Juros BNB (R$)', key: 'jurosBNB', isCurrency: true },
+    { label: 'Lucro operacional líquido (R$)', key: 'lucroOperacionalLiquido', isCurrency: true },
+    { label: 'FCO (R$)', key: 'fco', isCurrency: true },
+    { label: 'Investimentos (R$)', key: 'investimentos', isCurrency: true },
+    { label: 'Variação capital de giro (R$)', key: 'variacaoCapitalGiro', isCurrency: true },
   ]
 
   return (
@@ -57,7 +57,7 @@ function FluxoTable() {
                     {v === null
                       ? '—'
                       : row.isCurrency
-                        ? formatBRL(v)
+                        ? formatBRLValue(v)
                         : formatNumber(v)}
                   </td>
                 )
@@ -65,10 +65,10 @@ function FluxoTable() {
             </tr>
           ))}
           <tr className="border-t-2 border-ink">
-            <td className="px-3 py-3 text-[13px] font-bold text-ink">FLUXO DE CAIXA LIVRE (FCL)</td>
+            <td className="px-3 py-3 text-[13px] font-bold text-ink">FLUXO DE CAIXA LIVRE — FCL (R$)</td>
             {FLUXO_CAIXA.map((f) => (
               <td key={f.ano} className="tnum px-3 py-3 text-right font-mono text-[13px] font-bold text-ink">
-                {formatBRL(f.fcl)}
+                {formatBRLValue(f.fcl)}
               </td>
             ))}
           </tr>
@@ -87,7 +87,7 @@ function MargemTable() {
             <span className="eyebrow block">Ano</span>
           </th>
           <th scope="col" className="px-3 py-2.5 align-bottom text-right">
-            <span className="eyebrow block">MC unitária</span>
+            <span className="eyebrow block">MC unitária (R$)</span>
           </th>
           <th scope="col" className="px-3 py-2.5 align-bottom text-right">
             <span className="eyebrow block">% da receita (IMC)</span>
@@ -98,7 +98,9 @@ function MargemTable() {
         {MARGEM_CONTRIBUICAO_UNITARIA.map((m) => (
           <tr key={m.ano} className="border-b border-rule-soft last:border-0 hover:bg-paper/60">
             <td className="px-3 py-2.5 text-[13px] font-medium text-ink">Ano {m.ano}</td>
-            <td className="tnum px-3 py-2.5 text-right font-mono text-[13px] text-ink">{formatBRL(m.valor)}</td>
+            <td className="tnum px-3 py-2.5 text-right font-mono text-[13px] text-ink">
+              {formatBRLValue(m.valor)}
+            </td>
             <td className="tnum px-3 py-2.5 text-right font-mono text-[13px] text-muted">
               {formatPercent(m.percentReceita, 2)}
             </td>
@@ -185,13 +187,13 @@ export function ProjecoesFinanceiras() {
           <Panel title="Utilização da capacidade instalada">
             <div className="space-y-5">
               <CapacityBar
-                label="Clientes projetados (constante, Anos 1–5) vs. capacidade máxima (lavagem + secagem)"
+                label="Clientes/ano vs. capacidade máxima"
                 value={CAPACIDADE.clientesProjetadosAno1}
                 max={CAPACIDADE.maximaClientesAno}
                 valueLabel={`${formatNumber(CAPACIDADE.clientesProjetadosAno1)} / ${formatNumber(CAPACIDADE.maximaClientesAno)} (${formatPercent(CAPACIDADE.taxaUtilizacaoAno1)})`}
               />
               <CapacityBar
-                label="Ponto de equilíbrio — cestos/ano vs. capacidade máxima (somente lavagem)"
+                label="Ponto de equilíbrio vs. capacidade máxima"
                 value={PONTO_EQUILIBRIO.cestosAno}
                 max={CAPACIDADE.maximaSomenteLavagemCiclosAno}
                 valueLabel={`${formatNumber(PONTO_EQUILIBRIO.cestosAno)} / ${formatNumber(CAPACIDADE.maximaSomenteLavagemCiclosAno)} (${formatPercent(PONTO_EQUILIBRIO.taxaUtilizacao)})`}
@@ -199,12 +201,13 @@ export function ProjecoesFinanceiras() {
               />
             </div>
             <p className="mt-5 text-[11px] leading-relaxed text-muted">
-              Ponto de equilíbrio recalculado: gastos fixos anuais ({formatBRL(PONTO_EQUILIBRIO.gastosFixosAnuais)},
-              Tabela 16 — Ano 1) ÷ margem de contribuição unitária de {formatBRL(PONTO_EQUILIBRIO.margemContribuicaoUnitariaLavagem)}/cesto
-              (base "somente lavagem") ≈ {formatNumber(PONTO_EQUILIBRIO.cestosAno)} cestos/ano
-              (~{formatNumber(PONTO_EQUILIBRIO.cestosMes)}/mês). O estudo original mistura essa base com a
-              capacidade combinada de 20.520 clientes/ano — aqui as duas capacidades são mantidas
-              separadas.
+              Capacidade "lavagem + secagem" recalculada em {formatNumber(CAPACIDADE.maximaClientesAno)}{' '}
+              clientes/ano (10 ciclos/dia/máquina — seção 2.8 do estudo, não os 20.520 de uma nota isolada
+              da Tabela 13). Ponto de equilíbrio: gastos fixos anuais (
+              {formatBRL(PONTO_EQUILIBRIO.gastosFixosAnuais)}, já com aluguel) ÷ margem de contribuição de{' '}
+              {formatBRL(PONTO_EQUILIBRIO.margemContribuicaoUnitariaLavagem)}/cesto (base "somente lavagem")
+              ≈ {formatNumber(PONTO_EQUILIBRIO.cestosAno)} cestos/ano (~
+              {formatNumber(PONTO_EQUILIBRIO.cestosMes)}/mês).
             </p>
           </Panel>
         </section>

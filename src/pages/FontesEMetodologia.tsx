@@ -81,6 +81,31 @@ export function FontesEMetodologia() {
               necessário nessa parte.
             </p>
           </Panel>
+          <Panel title="Correção: aluguel do espaço, pesquisado mas nunca lançado nos custos fixos">
+            <p className="text-[13px] leading-relaxed text-muted">
+              Depois da correção acima, a TIR do projeto (78,4% a.a.) ainda soava alta demais frente à TMA
+              (11,19% a.a.). O motivo: o Anexo I do estudo original registra uma entrevista com a
+              proprietária de uma lavanderia self-service real, informando um aluguel de R$ 2.000,00 —
+              "ajustado para R$ 5.000,00" pelos próprios autores para refletir o custo de uma capital como
+              Salvador. Essa verba foi pesquisada e decidida, mas nunca chegou a entrar na Tabela 05 (custos
+              fixos mensais) nem na Tabela 16 (gastos fixos anuais) do documento original — uma unidade
+              dentro do estacionamento do RedeMix, no Rio Vermelho, dificilmente operaria sem custo de
+              locação. Este painel incorpora o aluguel de R$ 5.000,00/mês (reajustado pelo IPCA, como os
+              demais custos fixos) a CUSTOS_FIXOS_MENSAIS e a todo o Fluxo de Caixa, o que reduz a TIR para
+              ~50,9% a.a., o VPL de R$ 653,3 mil para R$ 347,6 mil, e o payback simples/descontado de
+              1,32/1,51 para 1,83/2,15 anos — ainda um projeto viável, e com margens compatíveis com as dos
+              concorrentes citados no próprio estudo (BubbleBox: payback 18–24 meses, margem até 60%; 60
+              Minutos: payback 12–18 meses, margem 50%).
+            </p>
+            <p className="mt-3 text-[13px] leading-relaxed text-muted">
+              Também foi corrigida a capacidade máxima instalada (lavagem + secagem): o estudo original usa
+              20.520 clientes/ano numa nota isolada da Tabela 13 ("gargalo secadora: 19 ciclos/máq/dia"),
+              mas a descrição do ciclo operacional (seção 2.8) deriva explicitamente "10 ciclos diários por
+              [máquina], totalizando 30 atendimentos por dia ou aproximadamente 900 ciclos mensais" — ou
+              seja, 10.800 clientes/ano. Usamos essa derivação, mais direta e consistente com o resto do
+              texto; a utilização projetada do Ano 1 passa de 43,1% para 81,95% da capacidade.
+            </p>
+          </Panel>
         </section>
 
         <section className="space-y-4">

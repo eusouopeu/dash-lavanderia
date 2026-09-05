@@ -3,7 +3,7 @@ import { PageHeader } from '../layout/PageHeader'
 import { Panel, SectionHeader } from '../components/Panel'
 import { KpiCard } from '../components/KpiCard'
 import { FLUXO_CAIXA, METRICAS_VIABILIDADE } from '../data'
-import { formatBRL, formatPercent, formatYears } from '../format'
+import { formatBRL, formatBRLValue, formatPercent, formatYears } from '../format'
 
 function SaldoAcumuladoTable() {
   const rows = FLUXO_CAIXA.reduce<{ ano: number; fcl: number; acumulado: number }[]>((acc, f) => {
@@ -30,12 +30,14 @@ function SaldoAcumuladoTable() {
         {rows.map((r) => (
           <tr key={r.ano} className="border-b border-rule-soft last:border-0 hover:bg-paper/60">
             <td className="px-3 py-2.5 text-[13px] font-medium text-ink">Ano {r.ano}</td>
-            <td className="tnum px-3 py-2.5 text-right font-mono text-[13px] text-ink">{formatBRL(r.fcl)}</td>
+            <td className="tnum px-3 py-2.5 text-right font-mono text-[13px] text-ink">
+              {formatBRLValue(r.fcl)}
+            </td>
             <td
               className="tnum px-3 py-2.5 text-right font-mono text-[13px] font-semibold"
               style={{ color: r.acumulado >= 0 ? 'var(--color-petrol)' : 'var(--color-ember)' }}
             >
-              {formatBRL(r.acumulado)}
+              {formatBRLValue(r.acumulado)}
             </td>
           </tr>
         ))}
@@ -97,8 +99,8 @@ export function ViabilidadeDoProjeto() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Panel title="Payback">
               <p className="text-[13px] leading-relaxed text-muted">
-                Indica recuperação rápida do investimento — bem antes de 2 anos, mesmo descontando o
-                capital pela TMA.
+                Indica recuperação do investimento pouco depois do Ano 2, mesmo descontando o capital
+                pela TMA — rápido para um investimento deste porte.
               </p>
             </Panel>
             <Panel title="VPL">

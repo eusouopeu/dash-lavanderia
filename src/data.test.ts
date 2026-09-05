@@ -1,13 +1,17 @@
 import { describe, expect, it } from 'vitest'
 import {
+  BALANCO_PATRIMONIAL_ANO0,
+  CAPACIDADE,
   CAPITAL_DE_GIRO,
   CUSTO_CAPITAL,
+  CUSTOS_FIXOS_MENSAIS,
   FINANCIAMENTO,
   FLUXO_CAIXA,
   GASTOS_PRE_OPERACIONAIS,
   INVESTIMENTO_TOTAL,
   METRICAS_VIABILIDADE,
   TOTAL_ATIVOS_FIXOS,
+  TOTAL_CUSTOS_FIXOS_MENSAIS,
 } from './data'
 
 describe('Investimento total', () => {
@@ -62,9 +66,9 @@ describe('Fluxo de caixa livre', () => {
     }
   })
 
-  it('nenhum ano ultrapassa a capacidade máxima instalada (20.520 clientes/ano)', () => {
+  it('nenhum ano ultrapassa a capacidade máxima instalada', () => {
     for (const f of FLUXO_CAIXA.filter((f) => f.ano > 0)) {
-      expect(f.clientesAno!).toBeLessThan(20_520)
+      expect(f.clientesAno!).toBeLessThan(CAPACIDADE.maximaClientesAno)
     }
   })
 })
@@ -76,5 +80,29 @@ describe('Métricas de viabilidade', () => {
 
   it('VPL é positivo', () => {
     expect(METRICAS_VIABILIDADE.vpl).toBeGreaterThan(0)
+  })
+})
+
+describe('Custos fixos mensais (inclui aluguel)', () => {
+  it('soma dos itens mensais × 12 é igual aos gastos fixos desembolsáveis do Ano 1', () => {
+    const ano1 = FLUXO_CAIXA.find((f) => f.ano === 1)!
+    expect(TOTAL_CUSTOS_FIXOS_MENSAIS * 12).toBeCloseTo(ano1.gastosFixosDesembolsaveis!, 1)
+  })
+
+  it('inclui uma linha de aluguel do espaço', () => {
+    expect(CUSTOS_FIXOS_MENSAIS.some((c) => c.item.toLowerCase().includes('aluguel'))).toBe(true)
+  })
+})
+
+describe('Balanço Patrimonial do Ano 0', () => {
+  it('total do Ativo é igual ao total do Passivo + PL, e ambos ao investimento total', () => {
+    expect(BALANCO_PATRIMONIAL_ANO0.totalAtivos).toBeCloseTo(INVESTIMENTO_TOTAL, 1)
+    expect(BALANCO_PATRIMONIAL_ANO0.totalPassivoPL).toBeCloseTo(INVESTIMENTO_TOTAL, 1)
+  })
+})
+
+describe('Capacidade', () => {
+  it('clientes/ano projetados não excedem a capacidade máxima combinada', () => {
+    expect(CAPACIDADE.clientesProjetadosAno1).toBeLessThan(CAPACIDADE.maximaClientesAno)
   })
 })

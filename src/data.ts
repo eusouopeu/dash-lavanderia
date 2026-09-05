@@ -25,6 +25,29 @@
  * usa o valor correto de dívida (R$ 83.124,62, 30% do investimento total
  * corrigido) e reconcilia exatamente com o CET de 5,1922% a.a. — nenhuma
  * correção adicional foi necessária nessa parte.
+ *
+ * CORREÇÃO ADICIONAL (3ª revisão): os custos fixos mensais (Tabela 05 do
+ * estudo original) não incluíam nenhuma verba de aluguel do espaço no
+ * estacionamento RedeMix — mas o Anexo I do próprio documento registra uma
+ * entrevista com a proprietária de uma lavanderia real informando um
+ * aluguel de R$ 2.000,00, "ajustado para R$ 5.000,00" pelos autores para
+ * refletir o custo de uma capital como Salvador. Essa verba foi pesquisada
+ * e decidida, mas nunca chegou a entrar nas tabelas de custos fixos —
+ * omissão que, por si só, explicava boa parte da TIR (78,4%) muito acima
+ * do razoável para o setor. Aqui, o aluguel de R$ 5.000,00/mês (reajustado
+ * pelo IPCA, como os demais custos fixos) foi incorporado a
+ * CUSTOS_FIXOS_MENSAIS e ao Fluxo de Caixa — o que reduz a TIR para
+ * ~50,9% a.a., ainda alta, mas na mesma ordem de grandeza dos concorrentes
+ * citados no estudo (BubbleBox: payback 18–24 meses, margem até 60%; 60
+ * Minutos: payback 12–18 meses, margem 50%).
+ *
+ * Também foi corrigida a capacidade máxima instalada (lavagem + secagem):
+ * o estudo original usa 20.520 clientes/ano num ponto (nota da Tabela 13,
+ * "gargalo secadora: 19 ciclos/máq/dia"), mas a própria descrição do ciclo
+ * operacional (seção 2.8) deriva explicitamente "10 ciclos diários por
+ * [máquina], totalizando 30 atendimentos por dia ou aproximadamente 900
+ * ciclos mensais" — ou seja, 10.800 clientes/ano. Usamos essa derivação,
+ * mais direta e consistente com o resto do texto.
  * Ver a página "Fontes e Metodologia" para a lista completa de referências.
  */
 
@@ -82,6 +105,45 @@ export const FINANCIAMENTO = {
   valorCapitalProprio: INVESTIMENTO_TOTAL * 0.7, // 193.957,45
   credor: 'Banco do Nordeste — linha FNE MPE',
 }
+
+/** Balanço Patrimonial do Ano 0 (Tabela 07, reestruturada em duas colunas
+ * ATIVO / PASSIVO + PL — a tabela original mesclava as duas colunas). */
+export const BALANCO_PATRIMONIAL_ANO0 = {
+  ativos: [
+    { label: 'Capital de giro', valor: CAPITAL_DE_GIRO.total },
+    { label: 'Gastos pré-operacionais', valor: GASTOS_PRE_OPERACIONAIS.total },
+    { label: 'Ativos não circulantes (fixos)', valor: TOTAL_ATIVOS_FIXOS },
+  ],
+  passivoPatrimonioLiquido: [
+    { label: 'Dívidas — BNB FNE MPE (30%)', valor: INVESTIMENTO_TOTAL * 0.3 },
+    { label: 'Capital próprio (70%)', valor: INVESTIMENTO_TOTAL * 0.7 },
+  ],
+  get totalAtivos() {
+    return this.ativos.reduce((sum, a) => sum + a.valor, 0)
+  },
+  get totalPassivoPL() {
+    return this.passivoPatrimonioLiquido.reduce((sum, p) => sum + p.valor, 0)
+  },
+}
+
+/** Custos fixos mensais do Ano 1 (Tabela 05 do estudo original + a verba de
+ * aluguel do espaço no RedeMix, pesquisada no Anexo I mas nunca incorporada
+ * às tabelas de custos do documento original — ver nota no topo do arquivo). */
+export const CUSTOS_FIXOS_MENSAIS = [
+  { item: 'Aluguel do espaço (estacionamento RedeMix)', valor: 5_000.0 },
+  { item: 'Limpeza do espaço', valor: 150.0 },
+  { item: 'Limpeza do ar-condicionado', valor: 218.5 },
+  { item: 'Parcela fixa da conta de energia elétrica', valor: 300.0 },
+  { item: 'Software de gestão', valor: 330.0 },
+  { item: 'Fundo de manutenção de máquinas', valor: 200.0 },
+  { item: 'Dedetização', valor: 200.0 },
+  { item: 'Contador', valor: 195.0 },
+  { item: 'Celular (gestão remota) + internet', valor: 128.9 },
+  { item: 'Produtos para limpeza do espaço', valor: 100.0 },
+  { item: 'Parcela fixa da conta de água', valor: 80.0 },
+]
+
+export const TOTAL_CUSTOS_FIXOS_MENSAIS = CUSTOS_FIXOS_MENSAIS.reduce((sum, c) => sum + c.valor, 0) // 6.902,40
 
 /* -------------------------------------------------------------------------- */
 /*  Custo de capital                                                          */
@@ -149,16 +211,16 @@ export const FLUXO_CAIXA: FluxoAno[] = [
     clientesAno: 8_851,
     receita: 318_636.0,
     margemContribuicaoTotal: 234_551.5,
-    gastosFixosDesembolsaveis: 22_828.8,
-    ebitda: 211_722.7,
+    gastosFixosDesembolsaveis: 82_828.8,
+    ebitda: 151_722.7,
     depreciacao: 37_288.58,
-    ebit: 174_434.12,
+    ebit: 114_434.12,
     jurosBNB: 4_216.57,
-    lucroOperacionalLiquido: 170_217.55,
-    fco: 207_506.13,
+    lucroOperacionalLiquido: 110_217.55,
+    fco: 147_506.13,
     investimentos: null,
     variacaoCapitalGiro: null,
-    fcl: 207_506.13,
+    fcl: 147_506.13,
   },
   {
     ano: 2,
@@ -166,16 +228,16 @@ export const FLUXO_CAIXA: FluxoAno[] = [
     clientesAno: 8_851,
     receita: 335_098.86,
     margemContribuicaoTotal: 246_677.37,
-    gastosFixosDesembolsaveis: 24_006.77,
-    ebitda: 222_670.6,
+    gastosFixosDesembolsaveis: 87_102.77,
+    ebitda: 159_574.6,
     depreciacao: 37_288.58,
-    ebit: 185_382.02,
+    ebit: 122_286.02,
     jurosBNB: 2_928.17,
-    lucroOperacionalLiquido: 182_453.85,
-    fco: 219_742.43,
+    lucroOperacionalLiquido: 119_357.85,
+    fco: 156_646.43,
     investimentos: null,
     variacaoCapitalGiro: null,
-    fcl: 219_742.43,
+    fcl: 156_646.43,
   },
   {
     ano: 3,
@@ -183,16 +245,16 @@ export const FLUXO_CAIXA: FluxoAno[] = [
     clientesAno: 8_851,
     receita: 352_358.31,
     margemContribuicaoTotal: 259_422.81,
-    gastosFixosDesembolsaveis: 25_245.52,
-    ebitda: 234_177.29,
+    gastosFixosDesembolsaveis: 91_597.27,
+    ebitda: 167_825.54,
     depreciacao: 37_288.58,
-    ebit: 196_888.71,
+    ebit: 130_536.96,
     jurosBNB: 409.94,
-    lucroOperacionalLiquido: 196_478.77,
-    fco: 233_767.35,
+    lucroOperacionalLiquido: 130_127.02,
+    fco: 167_415.6,
     investimentos: null,
     variacaoCapitalGiro: null,
-    fcl: 233_767.35,
+    fcl: 167_415.6,
   },
   {
     ano: 4,
@@ -200,16 +262,16 @@ export const FLUXO_CAIXA: FluxoAno[] = [
     clientesAno: 8_851,
     receita: 370_591.37,
     margemContribuicaoTotal: 272_787.82,
-    gastosFixosDesembolsaveis: 26_548.18,
-    ebitda: 246_239.64,
+    gastosFixosDesembolsaveis: 96_323.68,
+    ebitda: 176_464.14,
     depreciacao: 37_288.58,
-    ebit: 208_951.06,
+    ebit: 139_175.56,
     jurosBNB: 0.0,
-    lucroOperacionalLiquido: 208_951.06,
-    fco: 246_239.64,
+    lucroOperacionalLiquido: 139_175.56,
+    fco: 176_464.14,
     investimentos: null,
     variacaoCapitalGiro: null,
-    fcl: 246_239.64,
+    fcl: 176_464.14,
   },
   {
     ano: 5,
@@ -217,16 +279,16 @@ export const FLUXO_CAIXA: FluxoAno[] = [
     clientesAno: 8_851,
     receita: 389_709.53,
     margemContribuicaoTotal: 286_860.91,
-    gastosFixosDesembolsaveis: 27_918.07,
-    ebitda: 258_942.84,
+    gastosFixosDesembolsaveis: 101_293.99,
+    ebitda: 185_566.92,
     depreciacao: 37_288.58,
-    ebit: 221_654.26,
+    ebit: 148_278.34,
     jurosBNB: 0.0,
-    lucroOperacionalLiquido: 221_654.26,
-    fco: 258_942.84,
+    lucroOperacionalLiquido: 148_278.34,
+    fco: 185_566.92,
     investimentos: null,
     variacaoCapitalGiro: 32_164.4,
-    fcl: 291_107.24,
+    fcl: 217_731.32,
   },
 ]
 
@@ -242,10 +304,10 @@ export const VALOR_CONTABIL_LIQUIDO_ANO5 = 114_573.55
 /* -------------------------------------------------------------------------- */
 
 export const METRICAS_VIABILIDADE = {
-  paybackSimplesAnos: 1.32,
-  paybackDescontadoAnos: 1.51,
-  vpl: 589_720.56,
-  tir: 0.7526,
+  paybackSimplesAnos: 1.83,
+  paybackDescontadoAnos: 2.15,
+  vpl: 347_631.88,
+  tir: 0.5091,
   tma: CUSTO_CAPITAL.wacc,
 }
 
@@ -281,21 +343,26 @@ export const CSP_ANO1 = {
 /* -------------------------------------------------------------------------- */
 
 export const CAPACIDADE = {
-  maximaClientesAno: 20_520, // lavagem + secagem combinada, gargalo secadora
+  // 10 ciclos/dia por máquina × 3 máquinas × 30 dias × 12 meses = 10.800
+  // clientes/ano (seção 2.8 do estudo original) — substitui os 20.520
+  // usados numa nota isolada da Tabela 13 ("gargalo secadora: 19
+  // ciclos/máq/dia"), inconsistente com a derivação explícita do ciclo
+  // operacional. Ver nota no topo do arquivo.
+  maximaClientesAno: 10_800, // lavagem + secagem combinada
   maximaSomenteLavagemCiclosAno: 9_720, // base "somente lavagem"
   // Clientes/ano é constante em todo o horizonte (ver nota no topo do arquivo
   // sobre a correção do arrasto de fórmula) — a utilização, portanto, também
   // é constante nos 5 anos, não apenas no Ano 1.
   clientesProjetadosAno1: 8_851,
-  taxaUtilizacaoAno1: 8_851 / 20_520, // 43,13% — igual em todos os anos 1–5
+  taxaUtilizacaoAno1: 8_851 / 10_800, // 81,95% — igual em todos os anos 1–5
 }
 
 export const PONTO_EQUILIBRIO = {
-  gastosFixosAnuais: 22_828.8, // Tabela 16, Ano 1 — correto (não R$34.560,00)
+  gastosFixosAnuais: TOTAL_CUSTOS_FIXOS_MENSAIS * 12, // 82.828,80 — Tabela 16 Ano 1 + aluguel (ver nota no topo do arquivo)
   margemContribuicaoUnitariaLavagem: 10.44, // R$/cesto — base "somente lavagem"
-  cestosAno: 22_828.8 / 10.44, // ≈ 2.187 cestos/ano
-  cestosMes: (22_828.8 / 10.44) / 12, // ≈ 182/mês
-  taxaUtilizacao: (22_828.8 / 10.44) / 9_720, // ≈ 22,5% da capacidade "somente lavagem"
+  cestosAno: (TOTAL_CUSTOS_FIXOS_MENSAIS * 12) / 10.44, // ≈ 7.933,79 cestos/ano
+  cestosMes: (TOTAL_CUSTOS_FIXOS_MENSAIS * 12) / 10.44 / 12, // ≈ 661/mês
+  taxaUtilizacao: (TOTAL_CUSTOS_FIXOS_MENSAIS * 12) / 10.44 / 9_720, // ≈ 81,6% da capacidade "somente lavagem"
 }
 
 /* -------------------------------------------------------------------------- */

@@ -5,6 +5,12 @@ export function formatBRL(value: number, digits = 2): string {
   return `R$ ${ptBR(value, digits)}`
 }
 
+/** Mesmo formato de formatBRL, sem o prefixo "R$" — para células de tabela
+ * cuja unidade já está indicada no cabeçalho da coluna (ex.: "Total (R$)"). */
+export function formatBRLValue(value: number, digits = 2): string {
+  return ptBR(value, digits)
+}
+
 export function formatBRLCompact(value: number): string {
   const abs = Math.abs(value)
   if (abs >= 1_000_000) return `R$ ${ptBR(value / 1_000_000, 2)} mi`

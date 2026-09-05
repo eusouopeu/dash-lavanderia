@@ -1,16 +1,20 @@
+import { BanknotesIcon, BuildingOffice2Icon, ScaleIcon } from '@heroicons/react/24/outline'
 import { PageHeader } from '../layout/PageHeader'
 import { Panel, SectionHeader } from '../components/Panel'
 import { KpiCard } from '../components/KpiCard'
 import {
   ATIVOS_FIXOS,
+  BALANCO_PATRIMONIAL_ANO0,
   CAPITAL_DE_GIRO,
   CUSTO_CAPITAL,
+  CUSTOS_FIXOS_MENSAIS,
   FINANCIAMENTO,
   GASTOS_PRE_OPERACIONAIS,
   INVESTIMENTO_TOTAL,
   TOTAL_ATIVOS_FIXOS,
+  TOTAL_CUSTOS_FIXOS_MENSAIS,
 } from '../data'
-import { formatBRL, formatBRLCompact, formatPercent } from '../format'
+import { formatBRL, formatBRLCompact, formatBRLValue, formatPercent } from '../format'
 
 function InvestmentBreakdownBar() {
   const items = [
@@ -58,10 +62,10 @@ function AtivosFixosTable() {
               <span className="eyebrow block">Qtd.</span>
             </th>
             <th scope="col" className="px-3 py-2.5 align-bottom text-right">
-              <span className="eyebrow block">Preço unit.</span>
+              <span className="eyebrow block">Preço unit. (R$)</span>
             </th>
             <th scope="col" className="px-3 py-2.5 align-bottom text-right">
-              <span className="eyebrow block">Total</span>
+              <span className="eyebrow block">Total (R$)</span>
             </th>
             <th scope="col" className="px-3 py-2.5 align-bottom text-right">
               <span className="eyebrow block">Vida útil</span>
@@ -74,10 +78,10 @@ function AtivosFixosTable() {
               <td className="px-3 py-2.5 text-[13px] text-ink">{item.equipamento}</td>
               <td className="tnum px-3 py-2.5 text-right font-mono text-[12px] text-ink/80">{item.qtd}</td>
               <td className="tnum px-3 py-2.5 text-right font-mono text-[12px] text-ink/80">
-                {formatBRL(item.precoUnit)}
+                {formatBRLValue(item.precoUnit)}
               </td>
               <td className="tnum px-3 py-2.5 text-right font-mono text-[12px] font-semibold text-ink">
-                {formatBRL(item.total)}
+                {formatBRLValue(item.total)}
               </td>
               <td className="tnum px-3 py-2.5 text-right font-mono text-[12px] text-ink/80">
                 {item.vidaUtilAnos} anos
@@ -91,7 +95,7 @@ function AtivosFixosTable() {
             <td />
             <td />
             <td className="tnum px-3 py-3 text-right font-mono text-[13px] font-bold text-ink">
-              {formatBRL(TOTAL_ATIVOS_FIXOS)}
+              {formatBRLValue(TOTAL_ATIVOS_FIXOS)}
             </td>
             <td />
           </tr>
@@ -124,21 +128,104 @@ function CapitalDeGiroTable() {
   )
 }
 
-function CustoCapitalCards() {
-  const rows = [
-    { label: 'Kdr — custo real da dívida', value: CUSTO_CAPITAL.kdr, note: 'BNB, linha FNE MPE' },
-    { label: 'Ksr — custo real do capital próprio', value: CUSTO_CAPITAL.ksr, note: 'Via CAPM' },
-    { label: 'WACC / TMA do projeto', value: CUSTO_CAPITAL.wacc, note: '30% × Kdr + 70% × Ksr' },
-  ]
+function CustosFixosMensaisTable() {
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-      {rows.map((r) => (
-        <div key={r.label} className="rounded-md bg-paper p-4">
-          <p className="eyebrow mb-2">{r.label}</p>
-          <p className="tnum font-mono text-xl font-bold text-ink">{formatPercent(r.value, 2)}</p>
-          <p className="mt-1 text-[11px] text-muted">{r.note}</p>
-        </div>
-      ))}
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[420px] border-collapse text-left text-sm">
+        <caption className="sr-only">Custos fixos mensais, Ano 1</caption>
+        <thead>
+          <tr className="border-b border-rule">
+            <th scope="col" className="px-3 py-2.5 align-bottom">
+              <span className="eyebrow block">Item</span>
+            </th>
+            <th scope="col" className="px-3 py-2.5 align-bottom text-right">
+              <span className="eyebrow block">Valor mensal (R$)</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {CUSTOS_FIXOS_MENSAIS.map((item) => (
+            <tr key={item.item} className="border-b border-rule-soft last:border-0 hover:bg-paper/60">
+              <td className="px-3 py-2.5 text-[13px] text-ink">{item.item}</td>
+              <td className="tnum px-3 py-2.5 text-right font-mono text-[13px] font-semibold text-ink">
+                {formatBRLValue(item.valor)}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr className="border-t-2 border-ink">
+            <td className="px-3 py-3 text-[13px] font-bold text-ink">TOTAL</td>
+            <td className="tnum px-3 py-3 text-right font-mono text-[13px] font-bold text-ink">
+              {formatBRLValue(TOTAL_CUSTOS_FIXOS_MENSAIS)}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  )
+}
+
+function BalancoPatrimonialTable() {
+  const linhas = Math.max(
+    BALANCO_PATRIMONIAL_ANO0.ativos.length,
+    BALANCO_PATRIMONIAL_ANO0.passivoPatrimonioLiquido.length,
+  )
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[560px] border-collapse text-left text-sm">
+        <caption className="sr-only">Balanço patrimonial do Ano 0</caption>
+        <thead>
+          <tr className="border-b border-rule">
+            <th scope="col" className="px-3 py-2.5 align-bottom">
+              <span className="eyebrow block">Ativo</span>
+            </th>
+            <th scope="col" className="px-3 py-2.5 align-bottom text-right">
+              <span className="eyebrow block">Valor (R$)</span>
+            </th>
+            <th scope="col" className="px-3 py-2.5 align-bottom border-l border-rule pl-4">
+              <span className="eyebrow block">Passivo + patrimônio líquido</span>
+            </th>
+            <th scope="col" className="px-3 py-2.5 align-bottom text-right">
+              <span className="eyebrow block">Valor (R$)</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.from({ length: linhas }).map((_, i) => {
+            const ativo = BALANCO_PATRIMONIAL_ANO0.ativos[i]
+            const passivo = BALANCO_PATRIMONIAL_ANO0.passivoPatrimonioLiquido[i]
+            return (
+              <tr key={i} className="border-b border-rule-soft last:border-0 hover:bg-paper/60">
+                <td className="px-3 py-2.5 text-[13px] text-ink">{ativo?.label ?? ''}</td>
+                <td className="tnum px-3 py-2.5 text-right font-mono text-[13px] text-ink">
+                  {ativo ? formatBRLValue(ativo.valor) : ''}
+                </td>
+                <td className="border-l border-rule-soft px-3 py-2.5 pl-4 text-[13px] text-ink">
+                  {passivo?.label ?? ''}
+                </td>
+                <td className="tnum px-3 py-2.5 text-right font-mono text-[13px] text-ink">
+                  {passivo ? formatBRLValue(passivo.valor) : ''}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+        <tfoot>
+          <tr className="border-t-2 border-ink">
+            <td className="px-3 py-3 text-[13px] font-bold text-ink">TOTAL ATIVO</td>
+            <td className="tnum px-3 py-3 text-right font-mono text-[13px] font-bold text-ink">
+              {formatBRLValue(BALANCO_PATRIMONIAL_ANO0.totalAtivos)}
+            </td>
+            <td className="border-l border-ink px-3 py-3 pl-4 text-[13px] font-bold text-ink">
+              TOTAL PASSIVO + PL
+            </td>
+            <td className="tnum px-3 py-3 text-right font-mono text-[13px] font-bold text-ink">
+              {formatBRLValue(BALANCO_PATRIMONIAL_ANO0.totalPassivoPL)}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   )
 }
@@ -167,6 +254,37 @@ export function EstruturaDoInvestimento() {
           />
         </div>
 
+        <div className="space-y-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <KpiCard
+              label="WACC / TMA do projeto"
+              value={formatPercent(CUSTO_CAPITAL.wacc, 2)}
+              detail="30% × Kdr + 70% × Ksr"
+              accent="ink"
+              icon={<ScaleIcon className="h-4 w-4" />}
+            />
+            <KpiCard
+              label="Custo real da dívida (Kdr)"
+              value={formatPercent(CUSTO_CAPITAL.kdr, 2)}
+              detail="BNB, linha FNE MPE"
+              accent="ember"
+              icon={<BanknotesIcon className="h-4 w-4" />}
+            />
+            <KpiCard
+              label="Custo real do capital próprio (Ksr)"
+              value={formatPercent(CUSTO_CAPITAL.ksr, 2)}
+              detail="Via CAPM"
+              accent="petrol"
+              icon={<BuildingOffice2Icon className="h-4 w-4" />}
+            />
+          </div>
+          <p className="text-[11px] leading-relaxed text-muted">
+            CAPM: Rf = 14,50% (Selic abr/2026) · Rm = 13,00% (IBOVESPA histórico) · βL = 1,29 (via Hamada) ·
+            CRP Brasil = 3,24% · prêmio de liquidez para pequenas empresas +4,00% · deflacionado pelo IPCA
+            (4,39%).
+          </p>
+        </div>
+
         <section className="space-y-4">
           <SectionHeader
             title="Composição do investimento"
@@ -188,6 +306,21 @@ export function EstruturaDoInvestimento() {
               O valor total supera em 12,99% a estimativa divulgada pela franqueadora (R$ 165.000,00) —
               atribuído pelos autores à inflação e ao reajuste de preços entre a divulgação da franquia e
               a coleta de preços do estudo.
+            </p>
+          </Panel>
+        </section>
+
+        <section className="space-y-4">
+          <SectionHeader
+            title="Custos fixos mensais"
+            subtitle="Base do Ano 1 (Tabela 05 do estudo original, com a verba de aluguel incorporada)."
+          />
+          <Panel title={`Custos fixos mensais · Total ${formatBRL(TOTAL_CUSTOS_FIXOS_MENSAIS)}`}>
+            <CustosFixosMensaisTable />
+            <p className="mt-4 text-[11px] leading-relaxed text-muted">
+              O estudo original pesquisou um aluguel de R$ 5.000,00/mês para o espaço (Anexo I) mas nunca o
+              incluiu nas tabelas de custos fixos. Incorporado aqui, reajustado pelo IPCA nos anos
+              seguintes — ver "Fontes e Metodologia".
             </p>
           </Panel>
         </section>
@@ -222,16 +355,11 @@ export function EstruturaDoInvestimento() {
 
         <section className="space-y-4">
           <SectionHeader
-            title="Custo de capital"
-            subtitle="Kdr (dívida), Ksr (capital próprio, via CAPM) e o WACC real que fixa a TMA do projeto."
+            title="Balanço patrimonial do Ano 0"
+            subtitle="Ativo (capital de giro + pré-operacionais + ativos fixos) contra Passivo + PL (dívida + capital próprio)."
           />
-          <Panel title="WACC / TMA do projeto">
-            <CustoCapitalCards />
-            <p className="mt-4 text-[11px] leading-relaxed text-muted">
-              CAPM: Rf = 14,50% (Selic abr/2026) · Rm = 13,00% (IBOVESPA histórico) · βL = 1,29 (via
-              Hamada) · CRP Brasil = 3,24% · prêmio de liquidez para pequenas empresas +4,00% · deflacionado
-              pelo IPCA (4,39%).
-            </p>
+          <Panel title="Balanço patrimonial — Ano 0">
+            <BalancoPatrimonialTable />
           </Panel>
         </section>
       </main>

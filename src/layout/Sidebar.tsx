@@ -7,6 +7,8 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom'
+import { METRICAS_VIABILIDADE } from '../data'
+import { formatBRLCompact, formatPercent } from '../format'
 
 export interface NavItem {
   label: string
@@ -26,16 +28,16 @@ export const SECTIONS: NavSection[] = [
     items: [{ label: 'Panorama geral', to: '/', icon: HomeIcon, end: true }],
   },
   {
+    title: 'Mercado',
+    items: [{ label: 'Mercado e concorrência', to: '/mercado-e-concorrencia', icon: UsersIcon }],
+  },
+  {
     title: 'Estudo financeiro',
     items: [
       { label: 'Estrutura do investimento', to: '/estrutura-do-investimento', icon: BuildingLibraryIcon },
       { label: 'Projeções financeiras', to: '/projecoes-financeiras', icon: ChartBarIcon },
       { label: 'Viabilidade do projeto', to: '/viabilidade-do-projeto', icon: ScaleIcon },
     ],
-  },
-  {
-    title: 'Mercado',
-    items: [{ label: 'Mercado e concorrência', to: '/mercado-e-concorrencia', icon: UsersIcon }],
   },
   {
     title: 'Sobre',
@@ -96,15 +98,21 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         <ul className="space-y-1.5 px-1">
           <li className="flex items-center justify-between gap-2">
             <span className="font-mono text-[11px] text-white/70">TMA</span>
-            <span className="font-mono text-[11px] text-white/40">11,19% a.a.</span>
+            <span className="font-mono text-[11px] text-white/40">
+              {formatPercent(METRICAS_VIABILIDADE.tma, 2)} a.a.
+            </span>
           </li>
           <li className="flex items-center justify-between gap-2">
             <span className="font-mono text-[11px] text-white/70">TIR</span>
-            <span className="font-mono text-[11px] text-white/40">78,4% a.a.</span>
+            <span className="font-mono text-[11px] text-white/40">
+              {formatPercent(METRICAS_VIABILIDADE.tir, 1)} a.a.
+            </span>
           </li>
           <li className="flex items-center justify-between gap-2">
             <span className="font-mono text-[11px] text-white/70">VPL</span>
-            <span className="font-mono text-[11px] text-white/40">R$ 653,3 mil</span>
+            <span className="font-mono text-[11px] text-white/40">
+              {formatBRLCompact(METRICAS_VIABILIDADE.vpl)}
+            </span>
           </li>
         </ul>
       </div>
