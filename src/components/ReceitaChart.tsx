@@ -1,16 +1,6 @@
 import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { FLUXO_CAIXA } from '../data'
-
-const RULE = 'rgba(23,23,23,0.10)'
-const MUTED = '#737373'
-const PETROL = '#087f8c'
-const EMBER = '#e76f32'
-
-const AXIS_TICK = {
-  fontSize: 10,
-  fill: MUTED,
-  fontFamily: '"IBM Plex Mono", monospace',
-} as const
+import { FLUXO_CAIXA, type FluxoAno } from '../data'
+import { AXIS_TICK, CHART_CURSOR, CHART_EMBER, CHART_PETROL, CHART_RULE } from './chart-theme'
 
 interface Row {
   ano: number
@@ -41,18 +31,20 @@ function ChartTooltip({
   )
 }
 
-export function ReceitaChart({ height = 260 }: { height?: number }) {
-  const data: Row[] = FLUXO_CAIXA.filter((f) => f.ano > 0).map((f) => ({
-    ano: f.ano,
-    receita: f.receita ?? 0,
-    clientes: f.clientesAno ?? 0,
-  }))
+export function ReceitaChart({ height = 260, fluxo = FLUXO_CAIXA }: { height?: number; fluxo?: FluxoAno[] }) {
+  const data: Row[] = fluxo
+    .filter((f) => f.ano > 0)
+    .map((f) => ({
+      ano: f.ano,
+      receita: f.receita ?? 0,
+      clientes: f.clientesAno ?? 0,
+    }))
 
   return (
     <ResponsiveContainer width="100%" height={height}>
       <ComposedChart data={data} margin={{ top: 10, right: 8, left: -8, bottom: 0 }}>
-        <CartesianGrid stroke={RULE} vertical={false} />
-        <XAxis dataKey="ano" tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: RULE }} dy={4} />
+        <CartesianGrid stroke={CHART_RULE} vertical={false} />
+        <XAxis dataKey="ano" tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: CHART_RULE }} dy={4} />
         <YAxis
           yAxisId="left"
           tick={AXIS_TICK}
@@ -62,9 +54,9 @@ export function ReceitaChart({ height = 260 }: { height?: number }) {
           width={46}
         />
         <YAxis yAxisId="right" orientation="right" tick={AXIS_TICK} tickLine={false} axisLine={false} width={40} />
-        <Tooltip cursor={{ fill: 'rgba(23,23,23,0.04)' }} content={<ChartTooltip />} />
-        <Bar yAxisId="left" dataKey="receita" fill={PETROL} radius={[3, 3, 0, 0]} />
-        <Line yAxisId="right" type="monotone" dataKey="clientes" stroke={EMBER} strokeWidth={2} dot={{ r: 3 }} />
+        <Tooltip cursor={{ fill: CHART_CURSOR }} content={<ChartTooltip />} />
+        <Bar yAxisId="left" dataKey="receita" fill={CHART_PETROL} radius={[3, 3, 0, 0]} isAnimationActive={false} />
+        <Line yAxisId="right" type="monotone" dataKey="clientes" stroke={CHART_EMBER} strokeWidth={2} dot={{ r: 3 }} />
       </ComposedChart>
     </ResponsiveContainer>
   )

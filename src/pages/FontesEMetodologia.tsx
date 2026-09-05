@@ -1,6 +1,7 @@
 import { PageHeader } from '../layout/PageHeader'
 import { Panel, SectionHeader } from '../components/Panel'
-import { PREMISSAS, REFERENCIAS } from '../data'
+import { MODELO_BASE, PREMISSAS, REFERENCIAS } from '../data'
+import { formatBRL, formatPercent, formatYears } from '../format'
 
 export function FontesEMetodologia() {
   return (
@@ -104,6 +105,73 @@ export function FontesEMetodologia() {
               [máquina], totalizando 30 atendimentos por dia ou aproximadamente 900 ciclos mensais" — ou
               seja, 10.800 clientes/ano. Usamos essa derivação, mais direta e consistente com o resto do
               texto; a utilização projetada do Ano 1 passa de 43,1% para 81,95% da capacidade.
+            </p>
+          </Panel>
+          <Panel title="4ª revisão: capital de giro, CAPM, dupla contagem de juros e base de capacidade">
+            <p className="text-[13px] leading-relaxed text-muted">
+              Quatro correções adicionais, agora implementadas como fórmulas vivas em <code>model.ts</code>{' '}
+              em vez de números digitados (o que também é o que torna o Painel de Cenários possível — ver
+              "Painel de Cenários" no menu):
+            </p>
+            <ul className="mt-3 space-y-3">
+              <li className="flex gap-3">
+                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ember" aria-hidden />
+                <p className="text-[13px] leading-relaxed text-muted">
+                  <strong className="font-semibold text-ink">Capital de giro sem o aluguel.</strong> A linha
+                  "6 meses de custos fixos" do capital de giro continuava usando os custos fixos SEM o
+                  aluguel (R$ 1.902,40 × 6 = R$ 11.414,40) — um resíduo da correção anterior, que só havia
+                  chegado ao Fluxo de Caixa, não ao capital de giro. Corrigido para R$ 41.414,40 (com
+                  aluguel), o investimento total sobe de R$ 277.082,07 para R$ 307.082,07.
+                </p>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ember" aria-hidden />
+                <p className="text-[13px] leading-relaxed text-muted">
+                  <strong className="font-semibold text-ink">CAPM com prêmio de risco de mercado negativo.</strong>{' '}
+                  O estudo original usava Rm = 13,00% &lt; Rf = 14,50% (Selic), produzindo um ERP negativo: o
+                  beta alavancado de 1,29 reduzia o custo do capital próprio em vez de aumentá-lo — o oposto
+                  do que o CAPM deveria fazer para um negócio mais arriscado que a carteira de mercado.
+                  Substituímos por um ERP explícito e positivo de +4,50% a.a. (ordem de grandeza do prêmio
+                  histórico do Ibovespa sobre a Selic), o que eleva o custo real do capital próprio de
+                  15,65% para {formatPercent(0.2218, 2)} e o WACC/TMA de 11,19% para{' '}
+                  {formatPercent(0.1576, 2)} a.a.
+                </p>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ember" aria-hidden />
+                <p className="text-[13px] leading-relaxed text-muted">
+                  <strong className="font-semibold text-ink">Juros do BNB contados duas vezes.</strong> O
+                  fluxo original deduzia os juros do financiamento ("Juros BNB") para chegar ao FCO e, na
+                  sequência, descontava o resultado ao WACC — que já embute o custo da dívida (Kdr) na sua
+                  composição. É dupla contagem do custo do capital de terceiros. O fluxo agora é um FCFF
+                  (fluxo de caixa livre para a firma, sem juros): a estrutura de capital afeta o VPL apenas
+                  via WACC, como deveria. Como o Simples Nacional já é deduzido como percentual da receita
+                  (dentro da margem de contribuição, não do lucro), a depreciação não gera nenhum escudo
+                  fiscal adicional — logo FCO = EBIT + Depreciação = EBITDA em todos os anos.
+                </p>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ember" aria-hidden />
+                <p className="text-[13px] leading-relaxed text-muted">
+                  <strong className="font-semibold text-ink">Ponto de equilíbrio em base diferente da utilização projetada.</strong>{' '}
+                  A utilização projetada (81,95%) usava a capacidade combinada lavagem + secagem (10.800
+                  clientes/ano), mas o ponto de equilíbrio usava a margem de contribuição "somente lavagem"
+                  contra a capacidade "somente lavagem" (9.720 ciclos/ano) — duas bases diferentes lado a
+                  lado, sugerindo que o projeto operava próximo do limite quando na verdade não estava. Com a
+                  mesma base (clientes/ano, lavagem + secagem combinada) em ambos os lados, o ponto de
+                  equilíbrio cai para ≈3.125 clientes/ano — cerca de 28,9% da capacidade máxima, uma margem
+                  de segurança operacional bem mais folgada do que os ~81,6% sugeridos antes.
+                </p>
+              </li>
+            </ul>
+            <p className="mt-4 text-[13px] leading-relaxed text-muted">
+              O efeito combinado das quatro correções: VPL de R$ 347,6 mil para {formatBRL(MODELO_BASE.metricas.vpl)}
+              , TIR de 50,9% para {formatPercent(MODELO_BASE.metricas.tir, 1)} a.a., e payback
+              simples/descontado de 1,83/2,15 para {formatYears(MODELO_BASE.metricas.paybackSimplesAnos)} /{' '}
+              {formatYears(MODELO_BASE.metricas.paybackDescontadoAnos)} — ainda um projeto claramente viável
+              (TIR muito acima da TMA), mas com uma folga bem menor do que os números originais sugeriam. O
+              Painel de Cenários mostra o quanto essa folga se estreita ou se alarga sob premissas mais
+              pessimistas ou otimistas.
             </p>
           </Panel>
         </section>

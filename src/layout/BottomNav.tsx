@@ -5,7 +5,7 @@ const ITEMS = SECTIONS.flatMap((section) => section.items)
 
 export function BottomNav() {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex overflow-x-auto bg-ink lg:hidden">
+    <nav className="no-print fixed inset-x-0 bottom-0 z-40 flex overflow-x-auto bg-sidebar lg:hidden">
       {ITEMS.map((item) => (
         <NavLink
           key={item.to}

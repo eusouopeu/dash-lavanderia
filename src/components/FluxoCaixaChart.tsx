@@ -9,18 +9,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { FLUXO_CAIXA } from '../data'
-
-const RULE = 'rgba(23,23,23,0.10)'
-const MUTED = '#737373'
-const PETROL = '#087f8c'
-const EMBER = '#e76f32'
-
-const AXIS_TICK = {
-  fontSize: 10,
-  fill: MUTED,
-  fontFamily: '"IBM Plex Mono", monospace',
-} as const
+import { FLUXO_CAIXA, type FluxoAno } from '../data'
+import { CHART_CURSOR, CHART_EMBER, CHART_INK, CHART_PETROL, CHART_RULE, AXIS_TICK } from './chart-theme'
 
 interface TooltipPayloadEntry {
   value: number
@@ -47,8 +37,8 @@ function ChartTooltip({
   )
 }
 
-export function FluxoCaixaChart({ height = 260 }: { height?: number }) {
-  const data = FLUXO_CAIXA.map((f) => ({ ano: f.ano, fcl: f.fcl }))
+export function FluxoCaixaChart({ height = 260, fluxo = FLUXO_CAIXA }: { height?: number; fluxo?: FluxoAno[] }) {
+  const data = fluxo.map((f) => ({ ano: f.ano, fcl: f.fcl }))
   const dataWithCumulative = data.reduce<(typeof data[number] & { acumulado: number })[]>((acc, d) => {
     const previous = acc[acc.length - 1]?.acumulado ?? 0
     acc.push({ ...d, acumulado: previous + d.fcl })
@@ -58,8 +48,8 @@ export function FluxoCaixaChart({ height = 260 }: { height?: number }) {
   return (
     <ResponsiveContainer width="100%" height={height}>
       <ComposedChart data={dataWithCumulative} margin={{ top: 10, right: 8, left: -8, bottom: 0 }}>
-        <CartesianGrid stroke={RULE} vertical={false} />
-        <XAxis dataKey="ano" tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: RULE }} dy={4} />
+        <CartesianGrid stroke={CHART_RULE} vertical={false} />
+        <XAxis dataKey="ano" tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: CHART_RULE }} dy={4} />
         <YAxis
           tick={AXIS_TICK}
           tickLine={false}
@@ -67,13 +57,13 @@ export function FluxoCaixaChart({ height = 260 }: { height?: number }) {
           tickFormatter={(v) => `${(Number(v) / 1000).toLocaleString('pt-BR')}k`}
           width={46}
         />
-        <Tooltip cursor={{ fill: 'rgba(23,23,23,0.04)' }} content={<ChartTooltip />} />
-        <Bar dataKey="fcl" radius={[3, 3, 0, 0]}>
+        <Tooltip cursor={{ fill: CHART_CURSOR }} content={<ChartTooltip />} />
+        <Bar dataKey="fcl" radius={[3, 3, 0, 0]} isAnimationActive={false}>
           {dataWithCumulative.map((d) => (
-            <Cell key={d.ano} fill={d.fcl < 0 ? EMBER : PETROL} />
+            <Cell key={d.ano} fill={d.fcl < 0 ? CHART_EMBER : CHART_PETROL} />
           ))}
         </Bar>
-        <Line type="monotone" dataKey="acumulado" stroke="#171717" strokeWidth={1.5} dot={{ r: 2.5 }} />
+        <Line type="monotone" dataKey="acumulado" stroke={CHART_INK} strokeWidth={1.5} dot={{ r: 2.5 }} />
       </ComposedChart>
     </ResponsiveContainer>
   )

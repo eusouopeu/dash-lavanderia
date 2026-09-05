@@ -37,7 +37,7 @@ export function PanoramaGeral() {
             icon={<BuildingOffice2Icon className="h-4 w-4" />}
           />
           <KpiCard
-            label="VPL @ TMA 11,19%"
+            label={`VPL @ TMA ${formatPercent(METRICAS_VIABILIDADE.tma, 2)}`}
             value={formatBRLCompact(METRICAS_VIABILIDADE.vpl)}
             detail="Valor presente líquido positivo em 5 anos"
             accent="petrol"

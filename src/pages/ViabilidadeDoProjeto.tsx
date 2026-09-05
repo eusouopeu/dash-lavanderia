@@ -52,7 +52,7 @@ export function ViabilidadeDoProjeto() {
       <PageHeader
         eyebrow="Métricas de avaliação"
         title="Viabilidade do Projeto"
-        subtitle="Payback, VPL e TIR — todos verificados numericamente contra o fluxo de caixa e a TMA de 11,19% a.a."
+        subtitle={`Payback, VPL e TIR — todos verificados numericamente contra o fluxo de caixa e a TMA de ${formatPercent(METRICAS_VIABILIDADE.tma, 2)} a.a.`}
       />
       <main className="mx-auto max-w-4xl space-y-10 px-6 py-8 pb-24 lg:px-10 lg:pb-10">
         <section className="flex items-start gap-4 rounded-lg border border-petrol/30 bg-petrol-soft p-5">
@@ -80,7 +80,7 @@ export function ViabilidadeDoProjeto() {
             detail="Já considera o custo de capital (TMA)"
             accent="petrol"
           />
-          <KpiCard label="VPL @ TMA 11,19%" value={formatBRL(METRICAS_VIABILIDADE.vpl)} accent="ember" />
+          <KpiCard label={`VPL @ TMA ${formatPercent(METRICAS_VIABILIDADE.tma, 2)}`} value={formatBRL(METRICAS_VIABILIDADE.vpl)} accent="ember" />
           <KpiCard label="TIR" value={formatPercent(METRICAS_VIABILIDADE.tir, 1)} accent="ember" />
         </div>
 
@@ -111,7 +111,7 @@ export function ViabilidadeDoProjeto() {
             </Panel>
             <Panel title="TIR">
               <p className="text-[13px] leading-relaxed text-muted">
-                Muito acima da TMA (11,19% a.a.), sugerindo retorno esperado substancialmente superior ao
+                Muito acima da TMA ({formatPercent(METRICAS_VIABILIDADE.tma, 2)} a.a.), sugerindo retorno esperado substancialmente superior ao
                 custo de capital do projeto.
               </p>
             </Panel>

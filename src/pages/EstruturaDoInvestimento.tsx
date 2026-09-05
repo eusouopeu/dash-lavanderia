@@ -236,7 +236,7 @@ export function EstruturaDoInvestimento() {
       <PageHeader
         eyebrow="Ano 0 — balanço patrimonial"
         title="Estrutura do Investimento"
-        subtitle="Como os R$ 277.082,07 do investimento inicial se dividem, e de onde vem o financiamento"
+        subtitle={`Como os ${formatBRL(INVESTIMENTO_TOTAL)} do investimento inicial se dividem, e de onde vem o financiamento`}
       />
       <main className="mx-auto max-w-5xl space-y-10 px-6 py-8 pb-24 lg:px-10 lg:pb-10">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -259,7 +259,7 @@ export function EstruturaDoInvestimento() {
             <KpiCard
               label="WACC / TMA do projeto"
               value={formatPercent(CUSTO_CAPITAL.wacc, 2)}
-              detail="30% × Kdr + 70% × Ksr"
+              detail="30% × Kdr + 70% × Ksr (real)"
               accent="ink"
               icon={<ScaleIcon className="h-4 w-4" />}
             />
@@ -272,16 +272,18 @@ export function EstruturaDoInvestimento() {
             />
             <KpiCard
               label="Custo real do capital próprio (Ksr)"
-              value={formatPercent(CUSTO_CAPITAL.ksr, 2)}
+              value={formatPercent(CUSTO_CAPITAL.ksReal, 2)}
               detail="Via CAPM"
               accent="petrol"
               icon={<BuildingOffice2Icon className="h-4 w-4" />}
             />
           </div>
           <p className="text-[11px] leading-relaxed text-muted">
-            CAPM: Rf = 14,50% (Selic abr/2026) · Rm = 13,00% (IBOVESPA histórico) · βL = 1,29 (via Hamada) ·
-            CRP Brasil = 3,24% · prêmio de liquidez para pequenas empresas +4,00% · deflacionado pelo IPCA
-            (4,39%).
+            CAPM: Rf = 14,50% (Selic abr/2026) · ERP (prêmio de risco de mercado) = +4,50% a.a. · βL = 1,29
+            (via Hamada) · CRP Brasil = 3,24% · prêmio de liquidez para pequenas empresas +4,00% ·
+            deflacionado pelo IPCA (4,39%). O estudo original usava Rm − Rf com Rm = 13,00% &lt; Rf = 14,50%,
+            um ERP negativo que reduzia (em vez de aumentar) o custo do capital próprio de um negócio mais
+            arriscado que o mercado — ver "Fontes e Metodologia".
           </p>
         </div>
 

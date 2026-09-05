@@ -29,7 +29,7 @@ function ConcorrenteCard({ c }: { c: (typeof CONCORRENTES)[number] }) {
         ))}
       </ul>
       {c.observacoes && (
-        <p className="mt-3 rounded-md bg-ember-soft px-3 py-2 text-[11px] leading-relaxed text-[#a84b18]">
+        <p className="mt-3 rounded-md bg-ember-soft px-3 py-2 text-[11px] leading-relaxed text-ember-ink">
           {c.observacoes}
         </p>
       )}
@@ -77,7 +77,7 @@ function SwotGrid() {
                       style={
                         isForca
                           ? { backgroundColor: 'var(--color-petrol-soft)', color: 'var(--color-petrol)' }
-                          : { backgroundColor: 'var(--color-ember-soft)', color: '#a84b18' }
+                          : { backgroundColor: 'var(--color-ember-soft)', color: 'var(--color-ember-ink)' }
                       }
                     >
                       {value}

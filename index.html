@@ -10,8 +10,17 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <meta name="theme-color" content="#f5f3ee" />
+    <meta name="theme-color" content="#f5f3ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121416" media="(prefers-color-scheme: dark)" />
     <title>Estudo de Viabilidade — Lavanderia Self-Service Rio Vermelho</title>
+    <script>
+      try {
+        var theme = localStorage.getItem('dash-lavanderia:theme')
+        if (theme === 'light' || theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', theme)
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

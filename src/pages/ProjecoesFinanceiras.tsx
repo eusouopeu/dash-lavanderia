@@ -23,8 +23,6 @@ function FluxoTable() {
     { label: 'EBITDA (R$)', key: 'ebitda', isCurrency: true },
     { label: 'Depreciação (R$)', key: 'depreciacao', isCurrency: true },
     { label: 'EBIT (R$)', key: 'ebit', isCurrency: true },
-    { label: 'Juros BNB (R$)', key: 'jurosBNB', isCurrency: true },
-    { label: 'Lucro operacional líquido (R$)', key: 'lucroOperacionalLiquido', isCurrency: true },
     { label: 'FCO (R$)', key: 'fco', isCurrency: true },
     { label: 'Investimentos (R$)', key: 'investimentos', isCurrency: true },
     { label: 'Variação capital de giro (R$)', key: 'variacaoCapitalGiro', isCurrency: true },
@@ -182,7 +180,7 @@ export function ProjecoesFinanceiras() {
         <section className="space-y-4">
           <SectionHeader
             title="Receita vs. capacidade"
-            subtitle="Duas bases distintas de capacidade: lavagem+secagem combinada (gargalo secadora) e apenas lavagem."
+            subtitle="Utilização projetada e ponto de equilíbrio, na mesma base: clientes/ano, lavagem + secagem combinada."
           />
           <Panel title="Utilização da capacidade instalada">
             <div className="space-y-5">
@@ -194,20 +192,20 @@ export function ProjecoesFinanceiras() {
               />
               <CapacityBar
                 label="Ponto de equilíbrio vs. capacidade máxima"
-                value={PONTO_EQUILIBRIO.cestosAno}
-                max={CAPACIDADE.maximaSomenteLavagemCiclosAno}
-                valueLabel={`${formatNumber(PONTO_EQUILIBRIO.cestosAno)} / ${formatNumber(CAPACIDADE.maximaSomenteLavagemCiclosAno)} (${formatPercent(PONTO_EQUILIBRIO.taxaUtilizacao)})`}
+                value={PONTO_EQUILIBRIO.clientesBreakeven}
+                max={CAPACIDADE.maximaClientesAno}
+                valueLabel={`${formatNumber(PONTO_EQUILIBRIO.clientesBreakeven)} / ${formatNumber(CAPACIDADE.maximaClientesAno)} (${formatPercent(PONTO_EQUILIBRIO.taxaUtilizacao)})`}
                 color="var(--color-ember)"
               />
             </div>
             <p className="mt-5 text-[11px] leading-relaxed text-muted">
               Capacidade "lavagem + secagem" recalculada em {formatNumber(CAPACIDADE.maximaClientesAno)}{' '}
               clientes/ano (10 ciclos/dia/máquina — seção 2.8 do estudo, não os 20.520 de uma nota isolada
-              da Tabela 13). Ponto de equilíbrio: gastos fixos anuais (
-              {formatBRL(PONTO_EQUILIBRIO.gastosFixosAnuais)}, já com aluguel) ÷ margem de contribuição de{' '}
-              {formatBRL(PONTO_EQUILIBRIO.margemContribuicaoUnitariaLavagem)}/cesto (base "somente lavagem")
-              ≈ {formatNumber(PONTO_EQUILIBRIO.cestosAno)} cestos/ano (~
-              {formatNumber(PONTO_EQUILIBRIO.cestosMes)}/mês).
+              da Tabela 13). Ponto de equilíbrio: gastos fixos anuais ÷ margem de contribuição unitária do
+              Ano 1 ({formatBRL(PONTO_EQUILIBRIO.margemContribuicaoUnitariaAno1)}/cliente, lavagem + secagem
+              combinada — a mesma base usada na projeção de demanda, ao contrário de revisões anteriores
+              deste painel, que comparavam a utilização projetada contra uma base e o ponto de equilíbrio
+              contra outra) ≈ {formatNumber(PONTO_EQUILIBRIO.clientesBreakeven)} clientes/ano.
             </p>
           </Panel>
         </section>

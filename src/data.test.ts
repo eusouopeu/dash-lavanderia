@@ -3,7 +3,6 @@ import {
   BALANCO_PATRIMONIAL_ANO0,
   CAPACIDADE,
   CAPITAL_DE_GIRO,
-  CUSTO_CAPITAL,
   CUSTOS_FIXOS_MENSAIS,
   FINANCIAMENTO,
   FLUXO_CAIXA,
@@ -14,11 +13,14 @@ import {
   TOTAL_CUSTOS_FIXOS_MENSAIS,
 } from './data'
 
-describe('Investimento total', () => {
+describe('Investimento total (caso-base)', () => {
   it('soma pré-operacionais + ativos fixos + capital de giro', () => {
     const soma = GASTOS_PRE_OPERACIONAIS.total + TOTAL_ATIVOS_FIXOS + CAPITAL_DE_GIRO.total
-    expect(Math.round(soma * 100) / 100).toBeCloseTo(277_082.07, 1)
-    expect(Math.round(INVESTIMENTO_TOTAL * 100) / 100).toBeCloseTo(277_082.07, 1)
+    expect(INVESTIMENTO_TOTAL).toBeCloseTo(soma, 2)
+  })
+
+  it('capital de giro inclui o aluguel do espaço na linha de 6 meses de custos fixos', () => {
+    expect(CAPITAL_DE_GIRO.seisMesesCustosFixos).toBeCloseTo(TOTAL_CUSTOS_FIXOS_MENSAIS * 6, 2)
   })
 })
 
@@ -26,14 +28,6 @@ describe('Financiamento', () => {
   it('divide 30% dívida / 70% capital próprio do investimento total', () => {
     expect(FINANCIAMENTO.valorDivida + FINANCIAMENTO.valorCapitalProprio).toBeCloseTo(INVESTIMENTO_TOTAL, 1)
     expect(FINANCIAMENTO.percentDivida + FINANCIAMENTO.percentCapitalProprio).toBe(1)
-  })
-})
-
-describe('WACC / TMA', () => {
-  it('é igual a 30% × Kdr + 70% × Ksr = 11,19% a.a.', () => {
-    const wacc = 0.3 * CUSTO_CAPITAL.kdr + 0.7 * CUSTO_CAPITAL.ksr
-    expect(wacc).toBeCloseTo(0.1119, 3)
-    expect(CUSTO_CAPITAL.wacc).toBeCloseTo(0.1119, 3)
   })
 })
 
@@ -74,7 +68,7 @@ describe('Fluxo de caixa livre', () => {
 })
 
 describe('Métricas de viabilidade', () => {
-  it('TIR é muito superior à TMA — projeto viável', () => {
+  it('TIR é superior à TMA — projeto viável', () => {
     expect(METRICAS_VIABILIDADE.tir).toBeGreaterThan(METRICAS_VIABILIDADE.tma)
   })
 

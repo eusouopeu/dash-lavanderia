@@ -1,7 +1,9 @@
 import {
+  AdjustmentsHorizontalIcon,
   BanknotesIcon,
   BuildingLibraryIcon,
   ChartBarIcon,
+  DocumentTextIcon,
   HomeIcon,
   ScaleIcon,
   UsersIcon,
@@ -9,6 +11,7 @@ import {
 import { NavLink } from 'react-router-dom'
 import { METRICAS_VIABILIDADE } from '../data'
 import { formatBRLCompact, formatPercent } from '../format'
+import { ThemeToggle } from './ThemeToggle'
 
 export interface NavItem {
   label: string
@@ -37,25 +40,32 @@ export const SECTIONS: NavSection[] = [
       { label: 'Estrutura do investimento', to: '/estrutura-do-investimento', icon: BuildingLibraryIcon },
       { label: 'Projeções financeiras', to: '/projecoes-financeiras', icon: ChartBarIcon },
       { label: 'Viabilidade do projeto', to: '/viabilidade-do-projeto', icon: ScaleIcon },
+      { label: 'Painel de cenários', to: '/painel-de-cenarios', icon: AdjustmentsHorizontalIcon },
     ],
   },
   {
     title: 'Sobre',
-    items: [{ label: 'Fontes e metodologia', to: '/fontes-e-metodologia', icon: BanknotesIcon }],
+    items: [
+      { label: 'Fontes e metodologia', to: '/fontes-e-metodologia', icon: BanknotesIcon },
+      { label: 'Relatório completo', to: '/relatorio', icon: DocumentTextIcon },
+    ],
   },
 ]
 
 export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
-      <div className="mb-9 px-1">
-        <p className="eyebrow !text-white/45">Estudo de viabilidade</p>
-        <p className="mt-2 text-[15px] font-semibold leading-tight text-paper">
-          Lavanderia Self-Service
-          <br />
-          Rio Vermelho
-        </p>
-        <p className="mt-2 font-mono text-[11px] text-white/45">Franquia Laundromat · Salvador/BA</p>
+      <div className="mb-9 flex items-start justify-between gap-2 px-1">
+        <div>
+          <p className="eyebrow !text-white/45">Estudo de viabilidade</p>
+          <p className="mt-2 text-[15px] font-semibold leading-tight text-sidebar-fg">
+            Lavanderia Self-Service
+            <br />
+            Rio Vermelho
+          </p>
+          <p className="mt-2 font-mono text-[11px] text-white/45">Franquia Laundromat · Salvador/BA</p>
+        </div>
+        <ThemeToggle />
       </div>
 
       <nav className="flex flex-1 flex-col gap-7">
@@ -72,8 +82,8 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                     className={({ isActive }) =>
                       `group flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${
                         isActive
-                          ? 'bg-white/10 font-semibold text-paper'
-                          : 'font-medium text-white/60 hover:bg-white/5 hover:text-paper'
+                          ? 'bg-white/10 font-semibold text-sidebar-fg'
+                          : 'font-medium text-white/60 hover:bg-white/5 hover:text-sidebar-fg'
                       }`
                     }
                   >
@@ -122,7 +132,7 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function Sidebar() {
   return (
-    <aside className="hidden w-64 shrink-0 flex-col bg-ink px-4 py-7 lg:flex">
+    <aside className="no-print hidden w-64 shrink-0 flex-col bg-sidebar px-4 py-7 lg:flex">
       <SidebarContent />
     </aside>
   )
