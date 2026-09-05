@@ -127,13 +127,22 @@ export function ProjecoesFinanceiras() {
             <Panel title="FCL por ano">
               <FluxoCaixaChart />
             </Panel>
-            <Panel title="Receita e clientes" note="Barras: receita (eixo esquerdo) · linha: clientes/ano (eixo direito).">
+            <Panel
+              title="Receita e clientes"
+              note="Barras: receita (eixo esquerdo) · linha: clientes/ano (eixo direito, constante)."
+            >
               <ReceitaChart />
             </Panel>
           </div>
           <Panel title="Demonstrativo completo, ano a ano">
             <FluxoTable />
           </Panel>
+          <p className="text-[11px] leading-relaxed text-muted">
+            Clientes/ano é mantido constante em 8.851 do Ano 1 ao Ano 5: a planilha original arrastava essa
+            célula junto com o reajuste inflacionário do ticket médio, fazendo a base de clientes crescer
+            todo ano sem justificativa de mercado — apenas o ticket médio (reajustado pelo IPCA) deveria
+            variar. Receita, MC, EBITDA, FCO e FCL de cada ano refletem essa correção.
+          </p>
         </section>
 
         <section className="space-y-4">
@@ -176,7 +185,7 @@ export function ProjecoesFinanceiras() {
           <Panel title="Utilização da capacidade instalada">
             <div className="space-y-5">
               <CapacityBar
-                label="Ano 1 — clientes projetados vs. capacidade máxima (lavagem + secagem)"
+                label="Clientes projetados (constante, Anos 1–5) vs. capacidade máxima (lavagem + secagem)"
                 value={CAPACIDADE.clientesProjetadosAno1}
                 max={CAPACIDADE.maximaClientesAno}
                 valueLabel={`${formatNumber(CAPACIDADE.clientesProjetadosAno1)} / ${formatNumber(CAPACIDADE.maximaClientesAno)} (${formatPercent(CAPACIDADE.taxaUtilizacaoAno1)})`}

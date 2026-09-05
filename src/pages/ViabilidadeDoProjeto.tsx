@@ -3,7 +3,7 @@ import { PageHeader } from '../layout/PageHeader'
 import { Panel, SectionHeader } from '../components/Panel'
 import { KpiCard } from '../components/KpiCard'
 import { FLUXO_CAIXA, METRICAS_VIABILIDADE } from '../data'
-import { formatBRL, formatPercent } from '../format'
+import { formatBRL, formatPercent, formatYears } from '../format'
 
 function SaldoAcumuladoTable() {
   const rows = FLUXO_CAIXA.reduce<{ ano: number; fcl: number; acumulado: number }[]>((acc, f) => {
@@ -60,8 +60,8 @@ export function ViabilidadeDoProjeto() {
             <p className="mt-1 text-[13px] leading-relaxed text-ink/80">
               A TIR estimada ({formatPercent(METRICAS_VIABILIDADE.tir, 1)} a.a.) é muito superior à TMA do
               projeto ({formatPercent(METRICAS_VIABILIDADE.tma, 2)} a.a.), o VPL é positivo e o capital
-              investido retorna em menos de 1,5 ano — mesmo pelo critério mais conservador (payback
-              descontado).
+              investido retorna em {formatYears(METRICAS_VIABILIDADE.paybackDescontadoAnos)} — mesmo pelo
+              critério mais conservador (payback descontado).
             </p>
           </div>
         </section>
@@ -69,12 +69,12 @@ export function ViabilidadeDoProjeto() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <KpiCard
             label="Payback simples"
-            value={`${METRICAS_VIABILIDADE.paybackSimplesAnos.toFixed(2).replace('.', ',')} anos`}
+            value={formatYears(METRICAS_VIABILIDADE.paybackSimplesAnos)}
             accent="petrol"
           />
           <KpiCard
             label="Payback descontado"
-            value={`${METRICAS_VIABILIDADE.paybackDescontadoAnos.toFixed(2).replace('.', ',')} anos`}
+            value={formatYears(METRICAS_VIABILIDADE.paybackDescontadoAnos)}
             detail="Já considera o custo de capital (TMA)"
             accent="petrol"
           />
@@ -85,7 +85,7 @@ export function ViabilidadeDoProjeto() {
         <section className="space-y-4">
           <SectionHeader
             title="Saldo acumulado do fluxo de caixa"
-            subtitle="O saldo passa a positivo entre o Ano 1 e o Ano 2 — coerente com o payback simples de 1,31 ano."
+            subtitle={`O saldo passa a positivo entre o Ano 1 e o Ano 2 — coerente com o payback simples de ${formatYears(METRICAS_VIABILIDADE.paybackSimplesAnos)}.`}
           />
           <Panel title="Fluxo de caixa livre e saldo acumulado">
             <SaldoAcumuladoTable />

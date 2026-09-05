@@ -10,6 +10,21 @@
  * abaixo são os valores consolidados e reconciliados a partir do estudo
  * original: cada figura foi conferida aritmeticamente contra as tabelas
  * finais (Balanço do Ano 0, Fluxo de Caixa Livre, WACC, Payback/VPL/TIR).
+ *
+ * CORREÇÃO ADICIONAL (2ª revisão): a planilha original arrastou a fórmula
+ * de reajuste inflacionário da coluna "Clientes/ano" do Ano 1 até o Ano 5,
+ * fazendo a base de clientes crescer junto com o ticket médio — quando na
+ * verdade só o ticket deveria crescer (a demanda, vinda da estimativa de
+ * Fermi, é uma constante de mercado, não uma variável monetária). Aqui,
+ * Clientes/ano é fixado em 8.851 (valor do Ano 1) em todo o horizonte;
+ * apenas o ticket médio segue reajustado pelo IPCA. Isso reduz EBITDA,
+ * FCO, FCL, VPL e TIR do estudo original em relação à primeira revisão
+ * deste painel — ver "Fontes e Metodologia" para o detalhe do recálculo.
+ * Também foram conferidos os valores de financiamento e custo da dívida
+ * (juros BNB por ano, custo real Kdr): o cronograma SAC de amortização já
+ * usa o valor correto de dívida (R$ 83.124,62, 30% do investimento total
+ * corrigido) e reconcilia exatamente com o CET de 5,1922% a.a. — nenhuma
+ * correção adicional foi necessária nessa parte.
  * Ver a página "Fontes e Metodologia" para a lista completa de referências.
  */
 
@@ -133,85 +148,85 @@ export const FLUXO_CAIXA: FluxoAno[] = [
     ticketMedio: 36.0,
     clientesAno: 8_851,
     receita: 318_636.0,
-    margemContribuicaoTotal: 234_569.2,
+    margemContribuicaoTotal: 234_551.5,
     gastosFixosDesembolsaveis: 22_828.8,
-    ebitda: 211_740.4,
+    ebitda: 211_722.7,
     depreciacao: 37_288.58,
-    ebit: 174_451.82,
+    ebit: 174_434.12,
     jurosBNB: 4_216.57,
-    lucroOperacionalLiquido: 170_235.25,
-    fco: 207_523.83,
+    lucroOperacionalLiquido: 170_217.55,
+    fco: 207_506.13,
     investimentos: null,
     variacaoCapitalGiro: null,
-    fcl: 207_523.83,
+    fcl: 207_506.13,
   },
   {
     ano: 2,
     ticketMedio: 37.86,
-    clientesAno: 9_029,
-    receita: 341_816.27,
-    margemContribuicaoTotal: 251_633.74,
+    clientesAno: 8_851,
+    receita: 335_098.86,
+    margemContribuicaoTotal: 246_677.37,
     gastosFixosDesembolsaveis: 24_006.77,
-    ebitda: 227_626.98,
+    ebitda: 222_670.6,
     depreciacao: 37_288.58,
-    ebit: 190_338.4,
+    ebit: 185_382.02,
     jurosBNB: 2_928.17,
-    lucroOperacionalLiquido: 187_410.23,
-    fco: 224_698.81,
+    lucroOperacionalLiquido: 182_453.85,
+    fco: 219_742.43,
     investimentos: null,
     variacaoCapitalGiro: null,
-    fcl: 224_698.81,
+    fcl: 219_742.43,
   },
   {
     ano: 3,
     ticketMedio: 39.81,
-    clientesAno: 9_439,
-    receita: 375_776.52,
-    margemContribuicaoTotal: 276_634.15,
+    clientesAno: 8_851,
+    receita: 352_358.31,
+    margemContribuicaoTotal: 259_422.81,
     gastosFixosDesembolsaveis: 25_245.52,
-    ebitda: 251_388.63,
+    ebitda: 234_177.29,
     depreciacao: 37_288.58,
-    ebit: 214_100.05,
+    ebit: 196_888.71,
     jurosBNB: 409.94,
-    lucroOperacionalLiquido: 213_690.11,
-    fco: 250_978.69,
+    lucroOperacionalLiquido: 196_478.77,
+    fco: 233_767.35,
     investimentos: null,
     variacaoCapitalGiro: null,
-    fcl: 250_978.69,
+    fcl: 233_767.35,
   },
   {
     ano: 4,
     ticketMedio: 41.87,
-    clientesAno: 9_850,
-    receita: 412_373.23,
-    margemContribuicaoTotal: 303_575.43,
+    clientesAno: 8_851,
+    receita: 370_591.37,
+    margemContribuicaoTotal: 272_787.82,
     gastosFixosDesembolsaveis: 26_548.18,
-    ebitda: 277_027.24,
+    ebitda: 246_239.64,
     depreciacao: 37_288.58,
-    ebit: 239_738.66,
+    ebit: 208_951.06,
     jurosBNB: 0.0,
-    lucroOperacionalLiquido: 239_738.66,
-    fco: 277_027.24,
+    lucroOperacionalLiquido: 208_951.06,
+    fco: 246_239.64,
     investimentos: null,
     variacaoCapitalGiro: null,
-    fcl: 277_027.24,
+    fcl: 246_239.64,
   },
   {
     ano: 5,
     ticketMedio: 44.03,
-    clientesAno: 10_260,
-    receita: 451_702.16,
-    margemContribuicaoTotal: 332_528.08,
+    clientesAno: 8_851,
+    receita: 389_709.53,
+    margemContribuicaoTotal: 286_860.91,
     gastosFixosDesembolsaveis: 27_918.07,
-    ebitda: 304_610.01,
+    ebitda: 258_942.84,
     depreciacao: 37_288.58,
-    ebit: 267_321.43,
+    ebit: 221_654.26,
     jurosBNB: 0.0,
-    lucroOperacionalLiquido: 267_321.43,
-    fco: 304_610.01,
+    lucroOperacionalLiquido: 221_654.26,
+    fco: 258_942.84,
     investimentos: null,
     variacaoCapitalGiro: 32_164.4,
-    fcl: 336_774.41,
+    fcl: 291_107.24,
   },
 ]
 
@@ -227,10 +242,10 @@ export const VALOR_CONTABIL_LIQUIDO_ANO5 = 114_573.55
 /* -------------------------------------------------------------------------- */
 
 export const METRICAS_VIABILIDADE = {
-  paybackSimplesAnos: 1.31,
-  paybackDescontadoAnos: 1.5,
-  vpl: 653_278.79,
-  tir: 0.784,
+  paybackSimplesAnos: 1.32,
+  paybackDescontadoAnos: 1.51,
+  vpl: 589_720.56,
+  tir: 0.7526,
   tma: CUSTO_CAPITAL.wacc,
 }
 
@@ -268,8 +283,11 @@ export const CSP_ANO1 = {
 export const CAPACIDADE = {
   maximaClientesAno: 20_520, // lavagem + secagem combinada, gargalo secadora
   maximaSomenteLavagemCiclosAno: 9_720, // base "somente lavagem"
+  // Clientes/ano é constante em todo o horizonte (ver nota no topo do arquivo
+  // sobre a correção do arrasto de fórmula) — a utilização, portanto, também
+  // é constante nos 5 anos, não apenas no Ano 1.
   clientesProjetadosAno1: 8_851,
-  taxaUtilizacaoAno1: 8_851 / 20_520, // 43,13%
+  taxaUtilizacaoAno1: 8_851 / 20_520, // 43,13% — igual em todos os anos 1–5
 }
 
 export const PONTO_EQUILIBRIO = {

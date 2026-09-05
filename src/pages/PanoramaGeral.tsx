@@ -15,7 +15,7 @@ import {
   LOCALIZACAO,
   METRICAS_VIABILIDADE,
 } from '../data'
-import { formatBRLCompact, formatPercent } from '../format'
+import { formatBRLCompact, formatPercent, formatYears } from '../format'
 
 export function PanoramaGeral() {
   return (
@@ -52,8 +52,8 @@ export function PanoramaGeral() {
           />
           <KpiCard
             label="Payback simples"
-            value={`${METRICAS_VIABILIDADE.paybackSimplesAnos.toFixed(2).replace('.', ',')} anos`}
-            detail={`Descontado: ${METRICAS_VIABILIDADE.paybackDescontadoAnos.toFixed(2).replace('.', ',')} anos`}
+            value={formatYears(METRICAS_VIABILIDADE.paybackSimplesAnos)}
+            detail={`Descontado: ${formatYears(METRICAS_VIABILIDADE.paybackDescontadoAnos)}`}
             accent="ember"
             icon={<ClockIcon className="h-4 w-4" />}
           />
@@ -101,8 +101,9 @@ export function PanoramaGeral() {
               <div>
                 <dt className="eyebrow mb-1">Veredito</dt>
                 <dd className="font-semibold text-petrol">
-                  Projeto viável: TIR (78,4% a.a.) muito superior à TMA (11,19% a.a.), com payback abaixo
-                  de 1,5 ano.
+                  Projeto viável: TIR ({formatPercent(METRICAS_VIABILIDADE.tir, 1)} a.a.) muito superior à
+                  TMA ({formatPercent(METRICAS_VIABILIDADE.tma, 2)} a.a.), com payback descontado de{' '}
+                  {formatYears(METRICAS_VIABILIDADE.paybackDescontadoAnos)}.
                 </dd>
               </div>
             </dl>

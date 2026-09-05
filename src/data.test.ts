@@ -47,6 +47,26 @@ describe('Fluxo de caixa livre', () => {
   it('possui 6 pontos no tempo (Ano 0 a Ano 5)', () => {
     expect(FLUXO_CAIXA).toHaveLength(6)
   })
+
+  it('Clientes/ano é constante do Ano 1 ao Ano 5 (não deve crescer com o IPCA)', () => {
+    const anos = FLUXO_CAIXA.filter((f) => f.ano > 0)
+    const clientesAno1 = anos[0].clientesAno
+    for (const f of anos) {
+      expect(f.clientesAno).toBe(clientesAno1)
+    }
+  })
+
+  it('receita de cada ano é igual a clientes × ticket médio', () => {
+    for (const f of FLUXO_CAIXA.filter((f) => f.ano > 0)) {
+      expect(f.clientesAno! * f.ticketMedio!).toBeCloseTo(f.receita!, 0)
+    }
+  })
+
+  it('nenhum ano ultrapassa a capacidade máxima instalada (20.520 clientes/ano)', () => {
+    for (const f of FLUXO_CAIXA.filter((f) => f.ano > 0)) {
+      expect(f.clientesAno!).toBeLessThan(20_520)
+    }
+  })
 })
 
 describe('Métricas de viabilidade', () => {

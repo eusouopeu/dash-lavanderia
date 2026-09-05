@@ -24,3 +24,7 @@ export function formatPercentSigned(value: number, digits = 1): string {
 export function formatNumber(value: number, digits = 0): string {
   return value.toLocaleString('pt-BR', { minimumFractionDigits: digits, maximumFractionDigits: digits })
 }
+
+export function formatYears(value: number, digits = 2): string {
+  return `${ptBR(value, digits)} anos`
+}

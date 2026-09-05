@@ -65,6 +65,22 @@ export function FontesEMetodologia() {
               fluxo de caixa e métricas de viabilidade fechem entre si.
             </p>
           </Panel>
+          <Panel title="Correção: erro de arrasto de fórmula em Clientes/ano">
+            <p className="text-[13px] leading-relaxed text-muted">
+              A planilha original reajustava a coluna "Clientes/ano" do fluxo de caixa pela mesma taxa de
+              inflação (IPCA, 5,16% a.a.) usada para reajustar o ticket médio — um erro de arrastar a
+              fórmula do Ano 1 até o Ano 5 na célula errada. O número de clientes é uma projeção de demanda
+              (estimativa de Fermi), não um valor monetário: não deveria crescer com o reajuste de preços, e
+              no estudo original chegava a se aproximar da capacidade máxima instalada nos últimos anos do
+              horizonte. Este painel mantém Clientes/ano fixo em 8.851 (o valor correto do Ano 1) em todo o
+              horizonte de 5 anos — apenas o ticket médio segue reajustado pelo IPCA. Como consequência,
+              receita, margem de contribuição, EBITDA, FCO, FCL, VPL e TIR de todos os anos foram
+              recalculados; os valores de financiamento (dívida de R$ 83.124,62, 30% do investimento) e o
+              cronograma de juros do BNB (SAC, 12 meses de carência + 18 de amortização, CET 5,1922% a.a.)
+              foram conferidos separadamente e já estavam corretos no documento original — nenhum ajuste foi
+              necessário nessa parte.
+            </p>
+          </Panel>
         </section>
 
         <section className="space-y-4">
